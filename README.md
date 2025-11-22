@@ -1,4 +1,4 @@
-# 🔍 Retriever
+# 🐶 Retriever
 
 Retriever is a Chrome extension that instantly retrieves DNS hosting, registrar, and RDAP data for any domain. No more tab-switching or copy-pasting into various tools to get the information you need.
 

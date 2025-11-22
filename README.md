@@ -1,6 +1,10 @@
-# 🐶 Retriever
-
-Retriever is a browser extension that instantly retrieves DNS hosting, registrar, and status data for any domain. No more tab-switching or copy-pasting into various tools to get the information you need.
+<div align="center">
+  <img src="icons/128x128.png" alt="Retriever Logo" width="128" height="128">
+  
+  # Retriever
+  
+  Retriever is a browser extension that instantly retrieves DNS hosting, registrar, and status data for any domain. No more tab-switching or copy-pasting into various tools to get the information you need.
+</div>
 
 ## How to use
 

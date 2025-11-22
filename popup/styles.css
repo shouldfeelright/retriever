@@ -272,6 +272,8 @@ li:last-child { border-bottom: none; }
     border-radius: 10px;
     position: relative;
     transition: background 0.2s;
+    box-sizing: border-box;
+    padding: 2px;
 }
 
 .toggle-checkbox:checked {
@@ -291,5 +293,5 @@ li:last-child { border-bottom: none; }
 }
 
 .toggle-checkbox:checked:before {
-    left: 18px;
+    left: calc(100% - 18px);
 }

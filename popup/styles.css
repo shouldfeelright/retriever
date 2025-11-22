@@ -226,17 +226,3 @@ li:last-child { border-bottom: none; }
 }
 
 @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-.status-badge {
-    font-size: 9px;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 3px;
-    margin-top: 8px;
-    margin-right: 4px;
-    display: inline-block;
-    color: var(--badge-text);
-}
-
-#isCloud { background: rgba(37, 99, 235, 0.3); color: var(--badge-text); border: 1px solid rgba(37, 99, 235, 0.6); }
-#isEnterprise { background: rgba(16, 185, 129, 0.25); color: var(--badge-text); border: 1px solid rgba(16, 185, 129, 0.5); }

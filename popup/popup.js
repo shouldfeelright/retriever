@@ -102,8 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const elNsList = document.getElementById('nsList');
     const elWhois = document.getElementById('externalWhois');
     const elIcann = document.getElementById('externalIcann');
-    const badgeCloud = document.getElementById('isCloud');
-    const badgeEnt = document.getElementById('isEnterprise');
+    const rdapSection = document.getElementById('rdapSection');
+    const statusList = document.getElementById('statusList');
+    const eventsSection = document.getElementById('eventsSection');
+    const eventsList = document.getElementById('eventsList');
 
     // Feature: Get Current Tab Domain
     currentTabBtn.addEventListener('click', () => {
@@ -148,6 +150,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error("NXDOMAIN");
             }
 
+            // Fetch RDAP
+            let rdapData = null;
+            try {
+                const rdapResponse = await fetch(`https://rdap.org/domain/${domain}`);
+                if (rdapResponse.ok) {
+                    rdapData = await rdapResponse.json();
+                }
+            } catch (rdapErr) {
+                console.warn('RDAP fetch failed:', rdapErr);
+            }
+
             // Process Data
             const nsRecords = nsData.Answer 
                 ? nsData.Answer.filter(r => r.type === 2).map(r => r.data)
@@ -160,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const provider = getProviderFromNS(nsRecords);
 
             // Render
-            renderResults(domain, nsRecords, provider, ipRecord ? ipRecord.data : null);
+            renderResults(domain, nsRecords, provider, ipRecord ? ipRecord.data : null, rdapData);
 
         } catch (err) {
             console.error(err);
@@ -171,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function renderResults(domain, nsRecords, provider, ip) {
+    function renderResults(domain, nsRecords, provider, ip, rdapData) {
         elDomain.textContent = domain;
         elWhois.href = `https://who.is/whois/${domain}`;
         elIcann.href = `https://lookup.icann.org/en/lookup?name=${domain}`;
@@ -203,16 +216,32 @@ document.addEventListener('DOMContentLoaded', () => {
             elNsList.innerHTML = '<li>No records found</li>';
         }
 
-        // Badges
-        badgeCloud.classList.add('hidden');
-        badgeEnt.classList.add('hidden');
+        // RDAP Statuses
+        statusList.innerHTML = '';
+        if (rdapData && rdapData.status && rdapData.status.length > 0) {
+            rdapData.status.forEach(status => {
+                const li = document.createElement('li');
+                li.textContent = status;
+                statusList.appendChild(li);
+            });
+            rdapSection.classList.remove('hidden');
+        } else {
+            rdapSection.classList.add('hidden');
+        }
 
-        if (provider) {
-            const enterpriseList = ['Cloudflare', 'Amazon Route 53', 'Google Domains', 'Microsoft Azure', 'NS1 (IBM)', 'UltraDNS', 'Constellix', 'Oracle Dyn', 'CSC Global (Enterprise)', 'MarkMonitor (Enterprise)'];
-            const cloudList = ['Cloudflare', 'Amazon Route 53', 'DigitalOcean', 'Vercel', 'Netlify', 'Google Domains', 'Microsoft Azure', 'Alibaba Cloud', 'Tencent Cloud'];
-
-            if (cloudList.includes(provider)) badgeCloud.classList.remove('hidden');
-            if (enterpriseList.includes(provider)) badgeEnt.classList.remove('hidden');
+        // RDAP Events
+        eventsList.innerHTML = '';
+        if (rdapData && rdapData.events && rdapData.events.length > 0) {
+            rdapData.events.forEach(event => {
+                const li = document.createElement('li');
+                const action = event.eventAction || 'unknown';
+                const date = event.eventDate ? new Date(event.eventDate).toLocaleDateString() : 'N/A';
+                li.textContent = `${action}: ${date}`;
+                eventsList.appendChild(li);
+            });
+            eventsSection.classList.remove('hidden');
+        } else {
+            eventsSection.classList.add('hidden');
         }
 
         results.classList.remove('hidden');

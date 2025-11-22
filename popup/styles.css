@@ -397,7 +397,7 @@ li strong {
 }
 
 /* Toggle Switch (compact, less prominent, right-aligned) */
-.toggle-section{
+.toggle-section {
     display:flex;
     align-items:center;
     gap:8px;
@@ -408,9 +408,6 @@ li strong {
     border:1px solid var(--stroke);
     border-radius:8px;
     box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 6px 18px rgba(16,24,40,0.04);
-    -webkit-backdrop-filter: blur(6px);
-    backdrop-filter: blur(6px);
-}
     width: max-content; /* shrink to content width */
     margin-left: auto; /* ensure it hugs the right side */
     transition: all 0.12s ease;

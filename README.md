@@ -16,3 +16,5 @@ Retriever is a browser extension that instantly retrieves DNS hosting, registrar
 - 📋 Domain statuses with plain-English explanations
 - 📅 Domain event history (registration, transfers, expiration, etc.)
 - 🔗 Quick links to WHOIS, RDAP, and ICANN lookup
+
+<a href="https://www.flaticon.com/free-icons/dog-nose" title="dog nose icons">Dog nose icons created by Freepik - Flaticon</a>

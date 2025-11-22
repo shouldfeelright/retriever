@@ -50,6 +50,23 @@ header {
     box-shadow: var(--shadow-4);
 }
 
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.logo-text { display:flex; flex-direction:column; line-height:1; }
+.logo-text .app-name { font-weight:700; font-size:16px; color:var(--text-primary); }
+.logo-text .tagline { font-size:12px; color:var(--text-tertiary); font-weight:600; margin-top:2px; }
+
+.header-controls { display:flex; align-items:center; gap:8px; }
+.header-badge { font-size:11px; padding:4px 8px; border-radius:999px; background:var(--purple-bg); color:var(--purple); border:1px solid var(--stroke); font-weight:700; }
+.icon-btn { background: transparent; border: none; padding:6px; border-radius:6px; cursor:pointer; color:var(--accent-default); display:inline-flex; align-items:center; justify-content:center; }
+.icon-btn:hover { background: rgba(107,76,255,0.06); }
+.icon-btn svg { display:block; }
+
 .logo {
     display: flex;
     align-items: center;
@@ -397,21 +414,20 @@ li strong {
     100% { transform: rotate(360deg); } 
 }
 
-/* Toggle Switch (compact, less prominent, right-aligned) */
+/* Toggle Switch (compact, less prominent) */
 .toggle-section {
     display:flex;
     align-items:center;
     gap:8px;
-    width:max-content;
-    margin-left:auto;
+    width: max-content; /* shrink to content width */
+    margin: 8px 0 0 0; /* left-align and add small top spacing */
     padding:6px 10px;
     background:linear-gradient(180deg, rgba(255,255,255,0.52), rgba(245,252,255,0.6));
     border:1px solid var(--stroke);
     border-radius:8px;
     box-shadow: 0 1px 0 rgba(255,255,255,0.2) inset, 0 6px 18px rgba(16,24,40,0.04);
-    width: max-content; /* shrink to content width */
-    margin-left: auto; /* ensure it hugs the right side */
     transition: all 0.12s ease;
+    align-self: flex-start;
 }
 
 .toggle-section:hover {

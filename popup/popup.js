@@ -338,4 +338,14 @@ document.addEventListener('DOMContentLoaded', () => {
             eventsSection.classList.add('hidden');
         }
     }
+
+    // Header control handlers: refresh button
+    const refreshBtn = document.getElementById('refreshBtn');
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', () => {
+            const domain = input.value && input.value.trim();
+            if (domain) runScan(domain);
+            else window.location.reload();
+        });
+    }
 });

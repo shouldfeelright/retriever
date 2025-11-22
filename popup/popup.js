@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const elRegistrar = document.getElementById('registrarHint');
     const elNsList = document.getElementById('nsList');
     const elWhois = document.getElementById('externalWhois');
-    const elIcann = document.getElementById('externalIcann');
+    const elRdap = document.getElementById('externalRdap');
     const rdapSection = document.getElementById('rdapSection');
     const statusList = document.getElementById('statusList');
     const eventsSection = document.getElementById('eventsSection');
@@ -239,9 +239,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderResults(domain, nsRecords, provider, ip, rdapData) {
         elDomain.textContent = domain;
         elWhois.href = `https://who.is/whois/${domain}`;
-        elIcann.href = `https://lookup.icann.org/en/lookup?name=${domain}`;
+        elRdap.href = `https://rdap.org/domain/${domain}`;
         elIp.textContent = ip || "No A Record";
-
         // Provider logic
         if (provider) {
             elProvider.textContent = provider;

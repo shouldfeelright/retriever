@@ -279,24 +279,27 @@ h2 {
 }
 
 .info-box {
-    background: linear-gradient(135deg, var(--surface-secondary) 0%, #f8fbff 100%);
-    border: 2px solid var(--stroke);
+    /* Use the same visual treatment as the IP badge for consistency */
+    background: linear-gradient(135deg, var(--success-bg) 0%, #e6faf3 100%);
+    border: 1px solid #7fdbba;
     border-radius: var(--radius-medium);
     padding: 10px;
     transition: all 0.15s ease;
+    color: #006644;
+    box-shadow: 0 1px 3px rgba(0, 168, 107, 0.12);
 }
 
 .info-box:hover {
-    border-color: var(--stroke-strong);
-    box-shadow: var(--shadow-4);
+    border-color: #5fc097;
+    box-shadow: 0 6px 18px rgba(0, 168, 107, 0.14);
 }
 
 .info-box label {
     display: block;
     font-size: 11px;
     text-transform: uppercase;
-    color: var(--text-tertiary);
-    font-weight: 600;
+    color: #006644;
+    font-weight: 700;
     margin-bottom: 4px;
     letter-spacing: 0.3px;
 }

@@ -283,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     li.textContent = status;
                 } else {
                     const explanation = rdapStatusExplanations[status] || status;
-                    li.innerHTML = `<strong>${status}</strong><br><span style="font-size: 10px; color: #9fb0c2;">${explanation}</span>`;
+                    li.innerHTML = `<strong>${status}</strong><br><span class="explanation">${explanation}</span>`;
                 }
                 statusList.appendChild(li);
             });
@@ -304,7 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     li.textContent = `${action}: ${date}`;
                 } else {
                     const explanation = eventActionExplanations[action] || action;
-                    li.innerHTML = `<strong>${date}</strong><br><span style="font-size: 10px; color: #9fb0c2;">${explanation}</span>`;
+                    li.innerHTML = `<strong>${date}</strong><br><span class="explanation">${explanation}</span>`;
                 }
                 eventsList.appendChild(li);
             });

@@ -58,7 +58,6 @@
                                 <a id="externalRdap" href="#" target="_blank" rel="noopener noreferrer" class="whois-link">RDAP ↗</a>
                                 <a id="externalIcann" href="https://lookup.icann.org/en/lookup" target="_blank" rel="noopener noreferrer" class="whois-link">ICANN ↗</a>
                             </div>
-                            <div class="badge" id="ipAddress">--</div>
                         </div>
                     </div>
                 </div>
@@ -105,6 +104,19 @@
                     </button>
                     <div id="eventsContent" class="accordion-content hidden">
                         <ul id="eventsList"></ul>
+                    </div>
+                </section>
+
+                <!-- IP Address accordion (always at bottom) -->
+                <section id="ipSection" class="ns-section accordion">
+                    <button type="button" class="accordion-toggle" aria-expanded="false">
+                        <span>IP Address</span>
+                        <span class="accordion-caret">▸</span>
+                    </button>
+                    <div id="ipContent" class="accordion-content hidden">
+                        <div class="ip-display">
+                            <span class="badge" id="ipAddress">--</span>
+                        </div>
                     </div>
                 </section>
 

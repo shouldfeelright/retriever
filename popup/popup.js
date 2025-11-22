@@ -203,6 +203,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusList = document.getElementById('statusList');
     const eventsSection = document.getElementById('eventsSection');
     const eventsList = document.getElementById('eventsList');
+    const ipSection = document.getElementById('ipSection');
+    const ipContent = document.getElementById('ipContent');
     // Accordion content containers (collapsed by default)
     const nsContent = document.getElementById('nsContent');
     const rdapContent = document.getElementById('rdapContent');
@@ -372,6 +374,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Render RDAP sections with user-friendly formatting (default)
         renderRdapSections(rdapData, false);
+
+        // Always show IP section and keep it collapsed by default
+        if (ipSection) {
+            ipSection.classList.remove('hidden');
+            if (ipContent) ipContent.classList.add('hidden');
+        }
 
         results.classList.remove('hidden');
     }

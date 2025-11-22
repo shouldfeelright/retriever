@@ -286,26 +286,26 @@ h2 {
 }
 
 .info-box {
-    /* Prominent highlight for DNS Hosting / Probable Registrar using orange tokens */
-    background: linear-gradient(135deg, var(--warn-bg) 0%, #fff0d9 100%);
-    border: 1px solid var(--warn-border);
+    /* Prominent highlight for DNS Hosting / Registrar using green success tokens */
+    background: linear-gradient(135deg, var(--success-bg) 0%, #e8f7f0 100%);
+    border: 1px solid rgba(0, 168, 107, 0.2);
     border-radius: var(--radius-medium);
     padding: 10px;
     transition: all 0.15s ease;
-    color: var(--warn-text);
-    box-shadow: var(--warn-shadow);
+    color: #065f46;
+    box-shadow: 0 1px 3px rgba(0, 168, 107, 0.08);
 }
 
 .info-box:hover {
-    border-color: var(--warn);
-    box-shadow: var(--warn-shadow-lg);
+    border-color: var(--success);
+    box-shadow: 0 4px 12px rgba(0, 168, 107, 0.12);
 }
 
 .info-box label {
     display: block;
     font-size: 11px;
     text-transform: uppercase;
-    color: var(--warn-text);
+    color: var(--success);
     font-weight: 700;
     margin-bottom: 4px;
     letter-spacing: 0.3px;
@@ -314,7 +314,7 @@ h2 {
 .info-box .value {
     font-weight: 700;
     font-size: 13px;
-    color: var(--warn-text);
+    color: #065f46;
 }
 
 .text-blue { 

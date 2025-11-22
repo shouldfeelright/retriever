@@ -270,7 +270,6 @@ h2 {
     color: #006644;
     font-size: 12px;
     padding: 5px 12px;
-    border-radius: var(--radius-small);
     font-family: "Cascadia Code", "Consolas", monospace;
     margin-bottom: 0; /* remove extra bottom margin since spacing handled by card-actions gap */
     border: 1px solid #7fdbba;
@@ -282,7 +281,42 @@ h2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
+    margin-bottom: 12px;
+}
+
+.ip-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
     margin-bottom: 16px;
+    background: linear-gradient(135deg, var(--success-bg) 0%, #e8f7f0 100%);
+    border: 1px solid rgba(0, 168, 107, 0.2);
+    border-radius: var(--radius-medium);
+    transition: all 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0, 168, 107, 0.08);
+}
+
+.ip-section:hover {
+    border-color: var(--success);
+    box-shadow: 0 4px 12px rgba(0, 168, 107, 0.12);
+}
+
+.ip-section label {
+    font-size: 11px;
+    color: var(--success);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin: 0;
+}
+
+.ip-section .badge {
+    color: #065f46;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
 }
 
 .info-box {
@@ -364,10 +398,6 @@ li {
 
 li:hover {
     background: rgba(77, 166, 255, 0.05);
-}
-
-li:last-child { 
-    border-bottom: none;
 }
 
 li strong {

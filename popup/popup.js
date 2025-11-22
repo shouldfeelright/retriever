@@ -101,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const elRegistrar = document.getElementById('registrarHint');
     const elNsList = document.getElementById('nsList');
     const elWhois = document.getElementById('externalWhois');
+    const elIcann = document.getElementById('externalIcann');
     const badgeCloud = document.getElementById('isCloud');
     const badgeEnt = document.getElementById('isEnterprise');
 
@@ -173,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function renderResults(domain, nsRecords, provider, ip) {
         elDomain.textContent = domain;
         elWhois.href = `https://who.is/whois/${domain}`;
+        elIcann.href = `https://lookup.icann.org/en/lookup?name=${domain}`;
         elIp.textContent = ip || "No A Record";
 
         // Provider logic

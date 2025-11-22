@@ -312,7 +312,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // RDAP Events
         eventsList.innerHTML = '';
         if (rdapData && rdapData.events && rdapData.events.length > 0) {
-            rdapData.events.forEach(event => {
+            // Sort events by date descending (most recent first)
+            const sortedEvents = [...rdapData.events].sort((a, b) => {
+                const dateA = new Date(a.eventDate || 0);
+                const dateB = new Date(b.eventDate || 0);
+                return dateB - dateA;
+            });
+
+            sortedEvents.forEach(event => {
                 const li = document.createElement('li');
                 const action = event.eventAction || 'unknown';
                 const date = event.eventDate ? new Date(event.eventDate).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'}) : 'N/A';

@@ -498,6 +498,28 @@ li strong {
     animation: fadeIn 0.3s ease-in;
 }
 
+/* Accordion styles */
+.accordion { padding: 0; }
+.accordion-toggle {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: transparent;
+    border: none;
+    /* give the header a bit more vertical breathing room and align with card padding */
+    padding: 10px 12px; /* horizontal padding prevents label from being flush-left */
+    font-weight: 700;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+.accordion-toggle:focus { outline: none; box-shadow: var(--glow-focus); }
+.accordion-caret { font-size: 12px; color: var(--text-tertiary); transition: transform 0.18s ease; margin-left: 8px; transform-origin: center; }
+.accordion[aria-expanded="true"] .accordion-caret, .accordion-toggle[aria-expanded="true"] .accordion-caret { transform: rotate(90deg); }
+.accordion-content { overflow: hidden; transition: max-height 0.22s ease, opacity 0.18s ease; padding: 0 12px; }
+.accordion-content.hidden { max-height: 0; opacity: 0; padding: 0 12px; }
+.accordion-content:not(.hidden) { max-height: 800px; opacity: 1; padding: 8px 12px 12px 12px; }
+
 @keyframes fadeIn {
     from {
         opacity: 0;

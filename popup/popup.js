@@ -163,6 +163,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusList = document.getElementById('statusList');
     const eventsSection = document.getElementById('eventsSection');
     const eventsList = document.getElementById('eventsList');
+    // Accordion content containers (collapsed by default)
+    const nsContent = document.getElementById('nsContent');
+    const rdapContent = document.getElementById('rdapContent');
+    const eventsContent = document.getElementById('eventsContent');
     const rdapToggle = document.getElementById('rdapToggle');
 
     // Store raw RDAP data for toggle
@@ -173,6 +177,23 @@ document.addEventListener('DOMContentLoaded', () => {
         if (currentRdapData) {
             renderRdapSections(currentRdapData, rdapToggle.checked);
         }
+    });
+
+    // Initialize accordion toggle handlers
+    const accordionToggles = document.querySelectorAll('.accordion .accordion-toggle');
+    accordionToggles.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const expanded = btn.getAttribute('aria-expanded') === 'true';
+            const content = btn.nextElementSibling; // .accordion-content
+            if (!content) return;
+            if (expanded) {
+                btn.setAttribute('aria-expanded', 'false');
+                content.classList.add('hidden');
+            } else {
+                btn.setAttribute('aria-expanded', 'true');
+                content.classList.remove('hidden');
+            }
+        });
     });
 
     // Feature: Get Current Tab Domain
@@ -305,7 +326,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 statusList.appendChild(li);
             });
+            // Show the RDAP accordion header but keep content collapsed by default
             rdapSection.classList.remove('hidden');
+            if (rdapContent) rdapContent.classList.add('hidden');
         } else {
             rdapSection.classList.add('hidden');
         }
@@ -333,7 +356,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 eventsList.appendChild(li);
             });
+            // Show the events accordion header but keep content collapsed by default
             eventsSection.classList.remove('hidden');
+            if (eventsContent) eventsContent.classList.add('hidden');
         } else {
             eventsSection.classList.add('hidden');
         }

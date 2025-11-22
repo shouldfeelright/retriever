@@ -74,20 +74,38 @@
                     </div>
                 </div>
 
-                <div class="ns-section">
-                    <label>Nameservers</label>
-                    <ul id="nsList"></ul>
-                </div>
+                <!-- Nameservers accordion -->
+                <section id="nsSection" class="ns-section accordion">
+                    <button type="button" class="accordion-toggle" aria-expanded="false">
+                        <span>Nameservers</span>
+                        <span class="accordion-caret">▸</span>
+                    </button>
+                    <div id="nsContent" class="accordion-content hidden">
+                        <ul id="nsList"></ul>
+                    </div>
+                </section>
 
-                <div id="rdapSection" class="ns-section hidden">
-                    <label>Domain Statuses</label>
-                    <ul id="statusList"></ul>
-                </div>
+                <!-- RDAP statuses accordion (hidden entirely if no RDAP data) -->
+                <section id="rdapSection" class="ns-section accordion hidden">
+                    <button type="button" class="accordion-toggle" aria-expanded="false">
+                        <span>Domain Statuses</span>
+                        <span class="accordion-caret">▸</span>
+                    </button>
+                    <div id="rdapContent" class="accordion-content hidden">
+                        <ul id="statusList"></ul>
+                    </div>
+                </section>
 
-                <div id="eventsSection" class="ns-section hidden">
-                    <label>Domain Details</label>
-                    <ul id="eventsList"></ul>
-                </div>
+                <!-- RDAP events/details accordion (hidden if no events) -->
+                <section id="eventsSection" class="ns-section accordion hidden">
+                    <button type="button" class="accordion-toggle" aria-expanded="false">
+                        <span>Domain Details</span>
+                        <span class="accordion-caret">▸</span>
+                    </button>
+                    <div id="eventsContent" class="accordion-content hidden">
+                        <ul id="eventsList"></ul>
+                    </div>
+                </section>
 
                 <div class="toggle-section">
                     <label for="rdapToggle" class="toggle-label">RDAP Only</label>

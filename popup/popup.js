@@ -1,5 +1,45 @@
 // --- Configuration & Data ---
 
+const rdapStatusExplanations = {
+    'active': 'Domain is active and registered',
+    'inactive': 'Domain is inactive',
+    'client delete prohibited': 'Domain cannot be deleted by the registrant',
+    'client hold': 'Domain is held by registrant (not active)',
+    'client renew prohibited': 'Domain cannot be renewed by registrant',
+    'client transfer prohibited': 'Domain cannot be transferred to another registrar',
+    'client update prohibited': 'Domain information cannot be updated',
+    'pending create': 'Domain registration is pending',
+    'pending delete': 'Domain deletion is pending',
+    'pending renew': 'Domain renewal is pending',
+    'pending restore': 'Domain restoration is pending',
+    'pending transfer': 'Domain transfer is pending',
+    'pending update': 'Domain update is pending',
+    'redemption period': 'Domain is in grace period for restoration',
+    'renew': 'Domain can be renewed',
+    'server delete prohibited': 'Registry prevents domain deletion',
+    'server hold': 'Registry has placed hold on domain',
+    'server renew prohibited': 'Registry prevents domain renewal',
+    'server transfer prohibited': 'Registry prevents domain transfer',
+    'server update prohibited': 'Registry prevents domain information updates',
+    'transfer': 'Domain can be transferred',
+    'update': 'Domain information can be updated',
+    'ok': 'No issues detected',
+};
+
+const eventActionExplanations = {
+    'registration': 'Domain was registered',
+    'expiration': 'Domain registration expires',
+    'lastChanged': 'Domain information was last updated',
+    'lastRenewed': 'Domain was last renewed',
+    'created': 'Domain was created',
+    'updated': 'Domain information was updated',
+    'transferred': 'Domain was transferred to new registrar',
+    'locked': 'Domain lock was enabled',
+    'unlocked': 'Domain lock was disabled',
+    'purged': 'Domain was purged',
+    'renewed': 'Domain was renewed',
+};
+
 const providerSignatures = {
     'cloudflare.com': 'Cloudflare',
     'awsdns': 'Amazon Route 53',
@@ -106,6 +146,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusList = document.getElementById('statusList');
     const eventsSection = document.getElementById('eventsSection');
     const eventsList = document.getElementById('eventsList');
+    const rdapToggle = document.getElementById('rdapToggle');
+
+    // Store raw RDAP data for toggle
+    let currentRdapData = null;
+
+    // RDAP toggle listener
+    rdapToggle.addEventListener('change', () => {
+        if (currentRdapData) {
+            renderRdapSections(currentRdapData, rdapToggle.checked);
+        }
+    });
 
     // Feature: Get Current Tab Domain
     currentTabBtn.addEventListener('click', () => {
@@ -172,7 +223,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const provider = getProviderFromNS(nsRecords);
 
-            // Render
+            // Store RDAP data for toggle and render
+            currentRdapData = rdapData;
             renderResults(domain, nsRecords, provider, ipRecord ? ipRecord.data : null, rdapData);
 
         } catch (err) {
@@ -216,12 +268,24 @@ document.addEventListener('DOMContentLoaded', () => {
             elNsList.innerHTML = '<li>No records found</li>';
         }
 
+        // Render RDAP sections with user-friendly formatting (default)
+        renderRdapSections(rdapData, false);
+
+        results.classList.remove('hidden');
+    }
+
+    function renderRdapSections(rdapData, showTechnical) {
         // RDAP Statuses
         statusList.innerHTML = '';
         if (rdapData && rdapData.status && rdapData.status.length > 0) {
             rdapData.status.forEach(status => {
                 const li = document.createElement('li');
-                li.textContent = status;
+                if (showTechnical) {
+                    li.textContent = status;
+                } else {
+                    const explanation = rdapStatusExplanations[status] || status;
+                    li.innerHTML = `<strong>${status}</strong><br><span style="font-size: 10px; color: #9fb0c2;">${explanation}</span>`;
+                }
                 statusList.appendChild(li);
             });
             rdapSection.classList.remove('hidden');
@@ -235,15 +299,19 @@ document.addEventListener('DOMContentLoaded', () => {
             rdapData.events.forEach(event => {
                 const li = document.createElement('li');
                 const action = event.eventAction || 'unknown';
-                const date = event.eventDate ? new Date(event.eventDate).toLocaleDateString() : 'N/A';
-                li.textContent = `${action}: ${date}`;
+                const date = event.eventDate ? new Date(event.eventDate).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'}) : 'N/A';
+                
+                if (showTechnical) {
+                    li.textContent = `${action}: ${date}`;
+                } else {
+                    const explanation = eventActionExplanations[action] || action;
+                    li.innerHTML = `<strong>${date}</strong><br><span style="font-size: 10px; color: #9fb0c2;">${explanation}</span>`;
+                }
                 eventsList.appendChild(li);
             });
             eventsSection.classList.remove('hidden');
         } else {
             eventsSection.classList.add('hidden');
         }
-
-        results.classList.remove('hidden');
     }
 });

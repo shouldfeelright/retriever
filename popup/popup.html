@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retriever</title>
+    <link rel="stylesheet" href="styles.css">
+    </head>
+<body>
+
+    <header>
+        <div class="logo">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            <span>Retriever</span>
+        </div>
+    </header>
+
+    <main>
+        <form id="searchForm">
+            <div class="input-group">
+                <input type="text" id="domainInput" placeholder="example.com" autocomplete="off">
+                <button type="submit" id="scanBtn">Fetch</button>
+            </div>
+            <button type="button" id="currentTabBtn" class="secondary-btn">
+                Use Current Tab
+            </button>
+        </form>
+
+        <p id="errorMessage" class="error hidden">Please enter a valid domain.</p>
+
+        <div id="loader" class="hidden">
+            <div class="spinner"></div>
+            <p>Scanning DNS records...</p>
+        </div>
+
+        <div id="results" class="hidden fade-in">
+            <div class="card">
+                <div class="card-header">
+                    <h2 id="resultDomain">example.com</h2>
+                    <a id="externalWhois" href="#" target="_blank" class="whois-link">WHOIS ↗</a>
+                </div>
+                
+                <div class="badge" id="ipAddress">--</div>
+
+                <div class="grid">
+                    <div class="info-box">
+                        <label>DNS Hosting</label>
+                        <div id="providerName" class="value">--</div>
+                    </div>
+                    <div class="info-box">
+                        <label>Probable Registrar</label>
+                        <div id="registrarHint" class="value">--</div>
+                    </div>
+                </div>
+
+                <div class="ns-section">
+                    <label>Nameservers</label>
+                    <ul id="nsList"></ul>
+                </div>
+
+                <div id="badges" class="badge-container">
+                    <span id="isCloud" class="status-badge hidden">CLOUD</span>
+                    <span id="isEnterprise" class="status-badge hidden">ENTERPRISE</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="popup.js"></script>
+</body>
+</html>

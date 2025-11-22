@@ -47,7 +47,7 @@ const eventActionExplanations = {
     'flagged': 'Domain was flagged',
     'unflagged': 'Domain flag was removed',
     'last update of whois': 'WHOIS information was last updated',
-    'last update of rdap': 'RDAP information was last updated',
+    'last update of RDAP database': 'RDAP database was last updated',
     'last corresp': 'Last correspondence date',
     'last auto renewal': 'Domain was last auto-renewed',
     'enrolled in auto renewal': 'Domain enrolled in auto-renewal',

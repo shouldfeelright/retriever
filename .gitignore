@@ -20,6 +20,7 @@ Thumbs.db
 ehthumbs.db
 Desktop.ini
 *.ps1
+*.zip
 
-# Design source
+# Design files
 design/

@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Retriever",
   "version": "1.0",
-  "description": "Retriever is a browser extension that instantly retrieves DNS hosting, registrar, and status data for any domain. No more tab-switching or copy-pasting into various tools to get the information you need.",
+  "description": "Retriever is a browser extension that instantly retrieves DNS hosting, registrar, and status data for any domain.",
   "icons": {
     "16": "icons/16x16.png",
     "32": "icons/32x32.png",

@@ -255,6 +255,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function renderResults(domain, nsRecords, provider, ip, rdapData) {
         elDomain.textContent = domain;
+        elDomain.title = domain;
         elWhois.href = `https://who.is/whois/${domain}`;
         elRdap.href = `https://rdap.org/domain/${domain}`;
         elIp.textContent = ip || "No A Record";

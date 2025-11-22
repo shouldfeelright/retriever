@@ -274,6 +274,7 @@ li:last-child { border-bottom: none; }
     transition: background 0.2s;
     box-sizing: border-box;
     padding: 2px;
+    
 }
 
 .toggle-checkbox:checked {

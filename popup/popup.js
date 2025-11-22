@@ -380,6 +380,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // RDAP Statuses
         statusList.innerHTML = '';
         if (rdapData && rdapData.status && rdapData.status.length > 0) {
+            // Preserve current accordion state
+            const wasRdapExpanded = rdapContent && !rdapContent.classList.contains('hidden');
+            
             rdapData.status.forEach(status => {
                 const li = document.createElement('li');
                 if (showTechnical) {
@@ -390,9 +393,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 statusList.appendChild(li);
             });
-            // Show the RDAP accordion header but keep content collapsed by default
+            // Show the RDAP accordion header and restore previous state
             rdapSection.classList.remove('hidden');
-            if (rdapContent) rdapContent.classList.add('hidden');
+            if (rdapContent && !wasRdapExpanded) {
+                rdapContent.classList.add('hidden');
+            } else if (rdapContent && wasRdapExpanded) {
+                rdapContent.classList.remove('hidden');
+            }
         } else {
             rdapSection.classList.add('hidden');
         }
@@ -400,6 +407,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // RDAP Events
         eventsList.innerHTML = '';
         if (rdapData && rdapData.events && rdapData.events.length > 0) {
+            // Preserve current accordion state
+            const wasEventsExpanded = eventsContent && !eventsContent.classList.contains('hidden');
+            
             // Sort events by date descending (most recent first)
             const sortedEvents = [...rdapData.events].sort((a, b) => {
                 const dateA = new Date(a.eventDate || 0);
@@ -420,9 +430,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 eventsList.appendChild(li);
             });
-            // Show the events accordion header but keep content collapsed by default
+            // Show the events accordion header and restore previous state
             eventsSection.classList.remove('hidden');
-            if (eventsContent) eventsContent.classList.add('hidden');
+            if (eventsContent && !wasEventsExpanded) {
+                eventsContent.classList.add('hidden');
+            } else if (eventsContent && wasEventsExpanded) {
+                eventsContent.classList.remove('hidden');
+            }
         } else {
             eventsSection.classList.add('hidden');
         }

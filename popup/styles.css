@@ -1,31 +1,32 @@
 :root {
-    --bg: #f0f7ff;
+    /* Fluent 2-inspired purple accent palette */
+    --bg: #f6f3ff; /* subtle purple-tinged background */
     --bg-layer: #ffffff;
-    --bg-layer-alt: #f5faff;
+    --bg-layer-alt: #fbf7ff;
     --surface: #ffffff;
-    --surface-secondary: #f0f7ff;
-    --stroke: #b8d4f1;
-    --stroke-strong: #8bb8e8;
+    --surface-secondary: #fbf7ff;
+    --stroke: #e6dcff; /* soft purple stroke */
+    --stroke-strong: #d1c3ff;
     --text-primary: #1a1a1a;
-    --text-secondary: #2d5c8f;
-    --text-tertiary: #5a7fa3;
-    --accent-default: #0078d4;
-    --accent-hover: #0086f0;
-    --accent-pressed: #005a9e;
-    --accent-light: #4da6ff;
+    --text-secondary: #4b2fa6; /* deeper purple for secondary text */
+    --text-tertiary: #6b5cff;
+    --accent-default: #6B4CFF; /* Fluent violet accent */
+    --accent-hover: #7B62FF;
+    --accent-pressed: #5130d6;
+    --accent-light: #cfc8ff;
     --accent-text: #ffffff;
     --success: #00a86b;
     --success-bg: #d4f4e8;
     --error: #d13438;
-    --purple: #9b59d0;
-    --purple-bg: #f0e6ff;
+    --purple: #6B4CFF;
+    --purple-bg: #f3efff;
     --cyan: #00b4d8;
     --cyan-bg: #d9f2f9;
-    --shadow-2: 0 1px 2px rgba(0, 120, 212, 0.08);
-    --shadow-4: 0 2px 4px rgba(0, 120, 212, 0.12);
-    --shadow-8: 0 4px 8px rgba(0, 120, 212, 0.16);
-    --shadow-16: 0 8px 16px rgba(0, 120, 212, 0.2);
-    --glow-focus: 0 0 0 3px rgba(77, 166, 255, 0.4);
+    --shadow-2: 0 1px 2px rgba(107, 76, 255, 0.06);
+    --shadow-4: 0 2px 4px rgba(107, 76, 255, 0.09);
+    --shadow-8: 0 4px 8px rgba(107, 76, 255, 0.12);
+    --shadow-16: 0 8px 16px rgba(16, 24, 40, 0.08);
+    --glow-focus: 0 0 0 3px rgba(107, 76, 255, 0.18);
     --radius-small: 4px;
     --radius-medium: 6px;
     --radius-large: 8px;

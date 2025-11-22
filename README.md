@@ -10,7 +10,7 @@
 
 1. **Search a domain**: Enter any domain name and click "Fetch"
 2. **Or use the current tab**: Click "Use Current Tab" to auto-populate the domain from your active tab
-3. **View results**: See DNS hosting provider, likely registrar, nameservers, and domain statuses
+3. **View results**: See DNS hosting provider, registrar, nameservers, and domain statuses
 4. **Dig deeper**: Toggle "RDAP Only" for technical details or check WHOIS/RDAP/ICANN links for to view full records
 
 ## Features

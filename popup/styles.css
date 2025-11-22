@@ -589,3 +589,28 @@ li strong {
     background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent-default) 100%);
     background-clip: content-box;
 }
+
+/* Footer */
+footer {
+    text-align: right;
+    padding: 12px;
+    font-size: 12px;
+    color: #666;
+    border-top: 1px solid #eee;
+}
+
+footer a {
+    color: #0969da;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: opacity 0.15s ease;
+}
+
+footer a:hover {
+    opacity: 0.7;
+}
+
+footer svg {
+    display: block;
+}

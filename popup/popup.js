@@ -141,6 +141,45 @@ function getProviderFromNS(nsArray) {
     return null;
 }
 
+// Extract authoritative registrar from RDAP response
+function extractRegistrarFromRdap(rdapData) {
+    if (!rdapData || !Array.isArray(rdapData.entities)) return null;
+
+    const nameFromEntity = (entity) => {
+        try {
+            const v = entity.vcardArray;
+            if (!v || !Array.isArray(v[1])) return null;
+            for (const field of v[1]) {
+                if (!Array.isArray(field)) continue;
+                const key = field[0] && String(field[0]).toLowerCase();
+                if (key === 'fn' || key === 'org') {
+                    // vcard field format: [ name, params, type, value ]
+                    return field[3] || (typeof field[1] === 'string' ? field[1] : null);
+                }
+            }
+        } catch (e) {
+            return null;
+        }
+        return null;
+    };
+
+    // Prefer entities that explicitly list the 'registrar' role
+    for (const ent of rdapData.entities) {
+        if (Array.isArray(ent.roles) && ent.roles.some(r => /registrar/i.test(String(r)))) {
+            const n = nameFromEntity(ent);
+            if (n) return n;
+        }
+    }
+
+    // Fallback: any entity with an fn/org
+    for (const ent of rdapData.entities) {
+        const n = nameFromEntity(ent);
+        if (n) return n;
+    }
+
+    return null;
+}
+
 // --- Main Logic ---
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -156,6 +195,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const elIp = document.getElementById('ipAddress');
     const elProvider = document.getElementById('providerName');
     const elRegistrar = document.getElementById('registrarHint');
+    const elRegistrarNote = document.getElementById('registrarNote');
     const elNsList = document.getElementById('nsList');
     const elWhois = document.getElementById('externalWhois');
     const elRdap = document.getElementById('externalRdap');
@@ -280,17 +320,41 @@ document.addEventListener('DOMContentLoaded', () => {
         elWhois.href = `https://who.is/whois/${domain}`;
         elRdap.href = `https://rdap.org/domain/${domain}`;
         elIp.textContent = ip || "No A Record";
-        // Provider logic
+        // Provider logic (baseline)
         if (provider) {
             elProvider.textContent = provider;
             elProvider.className = "value text-blue";
-            elRegistrar.textContent = "Likely " + provider;
-            elRegistrar.className = "value text-purple";
         } else {
             elProvider.textContent = "Unknown / Private";
             elProvider.className = "value";
-            elRegistrar.textContent = "Check WHOIS";
-            elRegistrar.className = "value";
+        }
+
+        // Registrar: prefer authoritative RDAP data when available
+        const rdapRegistrar = extractRegistrarFromRdap(rdapData);
+        if (rdapRegistrar) {
+            elRegistrar.textContent = rdapRegistrar;
+            elRegistrar.className = "value text-purple";
+            if (elRegistrarNote) elRegistrarNote.textContent = '';
+        } else if (rdapData) {
+            // RDAP present but no registrar found
+            if (provider) {
+                elRegistrar.textContent = `Likely ${provider}`;
+                elRegistrar.className = "value text-purple";
+            } else {
+                elRegistrar.textContent = 'Unknown';
+                elRegistrar.className = 'value';
+            }
+            if (elRegistrarNote) elRegistrarNote.textContent = 'Authoritative registrar not present in RDAP response.';
+        } else {
+            // No RDAP available — fall back to heuristics
+            if (provider) {
+                elRegistrar.textContent = `Likely ${provider}`;
+                elRegistrar.className = "value text-purple";
+            } else {
+                elRegistrar.textContent = 'Check WHOIS';
+                elRegistrar.className = 'value';
+            }
+            if (elRegistrarNote) elRegistrarNote.textContent = 'RDAP unavailable, try WHOIS for authoritative registrar.';
         }
 
         // NS List

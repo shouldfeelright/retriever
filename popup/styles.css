@@ -22,6 +22,13 @@
     --purple-bg: #f3efff;
     --cyan: #00b4d8;
     --cyan-bg: #d9f2f9;
+    /* Warning / highlight (orange) used for DNS Hosting & Registrar prominence */
+    --warn: #d9730d;
+    --warn-bg: #fff4e6;
+    --warn-border: #f6a042;
+    --warn-text: #7a3800;
+    --warn-shadow: 0 1px 3px rgba(217,115,13,0.12);
+    --warn-shadow-lg: 0 6px 18px rgba(217,115,13,0.14);
     --shadow-2: 0 1px 2px rgba(107, 76, 255, 0.06);
     --shadow-4: 0 2px 4px rgba(107, 76, 255, 0.09);
     --shadow-8: 0 4px 8px rgba(107, 76, 255, 0.12);
@@ -279,35 +286,35 @@ h2 {
 }
 
 .info-box {
-    /* Use the same visual treatment as the IP badge for consistency */
-    background: linear-gradient(135deg, var(--success-bg) 0%, #e6faf3 100%);
-    border: 1px solid #7fdbba;
+    /* Prominent highlight for DNS Hosting / Probable Registrar using orange tokens */
+    background: linear-gradient(135deg, var(--warn-bg) 0%, #fff0d9 100%);
+    border: 1px solid var(--warn-border);
     border-radius: var(--radius-medium);
     padding: 10px;
     transition: all 0.15s ease;
-    color: #006644;
-    box-shadow: 0 1px 3px rgba(0, 168, 107, 0.12);
+    color: var(--warn-text);
+    box-shadow: var(--warn-shadow);
 }
 
 .info-box:hover {
-    border-color: #5fc097;
-    box-shadow: 0 6px 18px rgba(0, 168, 107, 0.14);
+    border-color: var(--warn);
+    box-shadow: var(--warn-shadow-lg);
 }
 
 .info-box label {
     display: block;
     font-size: 11px;
     text-transform: uppercase;
-    color: #006644;
+    color: var(--warn-text);
     font-weight: 700;
     margin-bottom: 4px;
     letter-spacing: 0.3px;
 }
 
 .info-box .value {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 13px;
-    color: var(--text-primary);
+    color: var(--warn-text);
 }
 
 .text-blue { 

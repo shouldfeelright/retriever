@@ -6,6 +6,8 @@
 
 Retriever is a browser extension that instantly retrieves DNS hosting, registrar, and status data for any domain. No more tab-switching or copy-pasting into various tools to get the information you need.
 
+**Download Link**: [Download Retriever on the Chrome Web Store](https://chromewebstore.google.com/detail/adjkmglhfbplmgomikgobbjalpmdahhi?utm_source=item-share-cb)
+
 ## How to use
 
 1. **Search a domain**: Enter any domain name and click "Fetch"

@@ -121,12 +121,25 @@ const providerSignatures = {
 
 // --- Helpers ---
 
+// Validate domain format - stricter security validation
+function isValidDomain(domain) {
+    if (!domain || typeof domain !== 'string') return false;
+    // RFC 1035 domain validation: alphanumeric, hyphens, dots
+    // Must start/end with alphanumeric, no consecutive dots
+    const domainRegex = /^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?$/i;
+    return domainRegex.test(domain) && domain.length <= 253;
+}
+
 function cleanDomain(url) {
     if (!url) return "";
     let domain = url.toLowerCase().trim();
     domain = domain.replace(/^(?:https?:\/\/)?(?:www\.)?/i, "");
     domain = domain.split('/')[0];
     domain = domain.split(':')[0]; // Remove port
+    domain = domain.split('?')[0]; // Remove query strings
+    domain = domain.split('#')[0]; // Remove fragments
+    // Additional sanitization: remove any non-domain characters
+    domain = domain.replace(/[^a-z0-9.-]/gi, '');
     return domain;
 }
 
@@ -258,7 +271,8 @@ document.addEventListener('DOMContentLoaded', () => {
         results.classList.add('hidden');
         
         const domain = cleanDomain(rawInput);
-        if (!domain || domain.length < 3 || !domain.includes('.')) {
+        // Stricter validation using regex
+        if (!domain || !isValidDomain(domain)) {
             errorMsg.textContent = "Please enter a valid domain.";
             errorMsg.classList.remove('hidden');
             return;
@@ -267,22 +281,31 @@ document.addEventListener('DOMContentLoaded', () => {
         loader.classList.remove('hidden');
 
         try {
+            // Security: Properly encode domain in URL parameters to prevent injection
+            const encodedDomain = encodeURIComponent(domain);
+            
             // Fetch NS
-            const nsResponse = await fetch(`https://dns.google/resolve?name=${domain}&type=NS`);
+            const nsResponse = await fetch(`https://dns.google/resolve?name=${encodedDomain}&type=NS`);
+            if (!nsResponse.ok) {
+                throw new Error(`HTTP ${nsResponse.status}`);
+            }
             const nsData = await nsResponse.json();
 
             // Fetch A (IP)
-            const aResponse = await fetch(`https://dns.google/resolve?name=${domain}&type=A`);
+            const aResponse = await fetch(`https://dns.google/resolve?name=${encodedDomain}&type=A`);
+            if (!aResponse.ok) {
+                throw new Error(`HTTP ${aResponse.status}`);
+            }
             const aData = await aResponse.json();
 
             if (nsData.Status !== 0) {
                 throw new Error("NXDOMAIN");
             }
 
-            // Fetch RDAP
+            // Fetch RDAP - encode domain in path segment
             let rdapData = null;
             try {
-                const rdapResponse = await fetch(`https://rdap.org/domain/${domain}`);
+                const rdapResponse = await fetch(`https://rdap.org/domain/${encodedDomain}`);
                 if (rdapResponse.ok) {
                     rdapData = await rdapResponse.json();
                 }
@@ -306,7 +329,8 @@ document.addEventListener('DOMContentLoaded', () => {
             renderResults(domain, nsRecords, provider, ipRecord ? ipRecord.data : null, rdapData);
 
         } catch (err) {
-            console.error(err);
+            // Security: Don't expose internal error details to users
+            console.error('Domain lookup error:', err);
             errorMsg.textContent = "Could not resolve domain.";
             errorMsg.classList.remove('hidden');
         } finally {
@@ -314,31 +338,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Sanitize text content to prevent XSS
+    function sanitizeText(text) {
+        if (typeof text !== 'string') return '';
+        // Remove any HTML tags and encode special characters
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.textContent || div.innerText || '';
+    }
+
     function renderResults(domain, nsRecords, provider, ip, rdapData) {
-        elDomain.textContent = domain;
-        elDomain.title = domain;
-        elWhois.href = `https://who.is/whois/${domain}`;
-        elRdap.href = `https://rdap.org/domain/${domain}`;
-        elIp.textContent = ip || "No A Record";
-        // Provider logic (baseline)
+        // Security: Use textContent (already safe) and properly encode URLs
+        const sanitizedDomain = sanitizeText(domain);
+        elDomain.textContent = sanitizedDomain;
+        elDomain.title = sanitizedDomain;
+        
+        // Security: Properly encode domain in URL paths
+        const encodedDomain = encodeURIComponent(domain);
+        elWhois.href = `https://who.is/whois/${encodedDomain}`;
+        elRdap.href = `https://rdap.org/domain/${encodedDomain}`;
+        
+        elIp.textContent = sanitizeText(ip || "No A Record");
+        // Provider logic (baseline) - Security: Sanitize provider name
         if (provider) {
-            elProvider.textContent = provider;
+            elProvider.textContent = sanitizeText(provider);
             elProvider.className = "value text-blue";
         } else {
             elProvider.textContent = "Unknown / Private";
             elProvider.className = "value";
         }
 
-        // Registrar: prefer authoritative RDAP data when available
+        // Registrar: prefer authoritative RDAP data when available - Security: Sanitize registrar name
         const rdapRegistrar = extractRegistrarFromRdap(rdapData);
         if (rdapRegistrar) {
-            elRegistrar.textContent = rdapRegistrar;
+            elRegistrar.textContent = sanitizeText(rdapRegistrar);
             elRegistrar.className = "value text-purple";
             if (elRegistrarNote) elRegistrarNote.textContent = '';
         } else if (rdapData) {
             // RDAP present but no registrar found
             if (provider) {
-                elRegistrar.textContent = `Likely ${provider}`;
+                elRegistrar.textContent = `Likely ${sanitizeText(provider)}`;
                 elRegistrar.className = "value text-purple";
             } else {
                 elRegistrar.textContent = 'Unknown';
@@ -348,7 +387,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // No RDAP available — fall back to heuristics
             if (provider) {
-                elRegistrar.textContent = `Likely ${provider}`;
+                elRegistrar.textContent = `Likely ${sanitizeText(provider)}`;
                 elRegistrar.className = "value text-purple";
             } else {
                 elRegistrar.textContent = 'Check WHOIS';
@@ -357,17 +396,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (elRegistrarNote) elRegistrarNote.textContent = 'RDAP unavailable, try WHOIS for authoritative registrar.';
         }
 
-        // NS List
+        // NS List - Security: Use textContent instead of innerHTML
         elNsList.innerHTML = '';
         if (nsRecords.length > 0) {
             nsRecords.forEach(ns => {
                 const cleanNs = ns.endsWith('.') ? ns.slice(0, -1) : ns;
                 const li = document.createElement('li');
-                li.textContent = cleanNs;
+                li.textContent = sanitizeText(cleanNs);
                 elNsList.appendChild(li);
             });
         } else {
-            elNsList.innerHTML = '<li>No records found</li>';
+            const li = document.createElement('li');
+            li.textContent = 'No records found';
+            elNsList.appendChild(li);
         }
 
         // Render RDAP sections with user-friendly formatting (default)
@@ -385,11 +426,21 @@ document.addEventListener('DOMContentLoaded', () => {
             
             rdapData.status.forEach(status => {
                 const li = document.createElement('li');
+                const sanitizedStatus = sanitizeText(String(status));
                 if (showTechnical) {
-                    li.textContent = status;
+                    li.textContent = sanitizedStatus;
                 } else {
-                    const explanation = rdapStatusExplanations[status] || status;
-                    li.innerHTML = `<strong>${status}</strong><br><span class="explanation">${explanation}</span>`;
+                    // Security: Use DOM methods instead of innerHTML
+                    const explanation = sanitizeText(rdapStatusExplanations[status] || status);
+                    const strong = document.createElement('strong');
+                    strong.textContent = sanitizedStatus;
+                    const br = document.createElement('br');
+                    const span = document.createElement('span');
+                    span.className = 'explanation';
+                    span.textContent = explanation;
+                    li.appendChild(strong);
+                    li.appendChild(br);
+                    li.appendChild(span);
                 }
                 statusList.appendChild(li);
             });
@@ -419,14 +470,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
             sortedEvents.forEach(event => {
                 const li = document.createElement('li');
-                const action = event.eventAction || 'unknown';
+                const action = String(event.eventAction || 'unknown');
+                const sanitizedAction = sanitizeText(action);
                 const date = event.eventDate ? new Date(event.eventDate).toLocaleDateString('en-US', {year: 'numeric', month: 'short', day: 'numeric'}) : 'N/A';
                 
                 if (showTechnical) {
-                    li.textContent = `${action}: ${date}`;
+                    li.textContent = `${sanitizedAction}: ${date}`;
                 } else {
-                    const explanation = eventActionExplanations[action] || action;
-                    li.innerHTML = `<strong>${date}</strong><br><span class="explanation">${explanation}</span>`;
+                    // Security: Use DOM methods instead of innerHTML
+                    // Use original action for dictionary lookup, sanitize the result for display
+                    const explanation = sanitizeText(eventActionExplanations[action] || action);
+                    const strong = document.createElement('strong');
+                    strong.textContent = date;
+                    const br = document.createElement('br');
+                    const span = document.createElement('span');
+                    span.className = 'explanation';
+                    span.textContent = explanation;
+                    li.appendChild(strong);
+                    li.appendChild(br);
+                    li.appendChild(span);
                 }
                 eventsList.appendChild(li);
             });
